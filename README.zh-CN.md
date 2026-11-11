@@ -8,6 +8,20 @@
 
 > 规范以英文版 [SPEC.md](SPEC.md) 为准。本 README 为译文，如与英文版不一致，请以英文版为准。
 
+## 预览
+
+**索引：fixture 按 atomic design 层级分组，顶部是搜索框**
+
+<img src="docs/images/catalog-index.png" alt="按 atomic design 层级分组的目录索引" width="480">
+
+**搜索：输入 `button load` 找到 `Button / Loading`**
+
+<img src="docs/images/catalog-search.png" alt="筛选到 Button / Loading 的搜索结果" width="480">
+
+**每个 fixture 对应一个 URL：`?c=LoginPage&f=Server error`**
+
+<img src="docs/images/catalog-fixture.png" alt="处于 Server error 状态的 LoginPage fixture" width="480">
+
 ## 使用方法
 
 在需要组件目录的应用中，把本仓库的 URL 交给你的 AI 编程助手：

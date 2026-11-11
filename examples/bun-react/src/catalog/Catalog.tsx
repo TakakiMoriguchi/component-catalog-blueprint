@@ -79,7 +79,7 @@ function CatalogIndex({ registry, initialQuery }: { registry: Registry; initialQ
         style={{ width: "100%", padding: "8px 10px", fontSize: 15, boxSizing: "border-box" }}
       />
       <p aria-live="polite" style={{ color: "#666", fontSize: 13 }}>
-        {visible.length} fixtures
+        {visible.length} {visible.length === 1 ? "fixture" : "fixtures"}
       </p>
       {LEVELS.map((level) => {
         const items = visible.filter((entry) => entry.level === level);
