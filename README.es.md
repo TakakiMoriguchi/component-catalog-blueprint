@@ -2,6 +2,16 @@
 
 [English](README.md) | [日本語](README.ja.md) | Español | [简体中文](README.zh-CN.md)
 
+<h1 align="center">0 packages. 0 MB.</h1>
+
+<p align="center"><b>Cero dependencias para el catálogo. Solo la compilación de tu aplicación.</b></p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/catalog_dependencies-0-00b894?style=for-the-badge" alt="catalog dependencies: 0">
+  <img src="https://img.shields.io/badge/catalog_footprint-0_MB-3d6bff?style=for-the-badge" alt="catalog footprint: 0 MB">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-0f1630?style=for-the-badge" alt="license: MIT"></a>
+</p>
+
 Un plano para catálogos de componentes: un único conjunto de reglas que sirve para cualquier framework de front-end o motor de plantillas del lado del servidor, más una implementación de referencia que funciona.
 
 Esto **no es una biblioteca**. No hay nada que instalar. Cada aplicación escribe su propio catálogo, pequeño, siguiendo [SPEC.md](SPEC.md).

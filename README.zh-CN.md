@@ -2,6 +2,16 @@
 
 [English](README.md) | [日本語](README.ja.md) | [Español](README.es.md) | 简体中文
 
+<h1 align="center">0 packages. 0 MB.</h1>
+
+<p align="center"><b>目录零依赖。只用你应用自己的构建，别无其他。</b></p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/catalog_dependencies-0-00b894?style=for-the-badge" alt="catalog dependencies: 0">
+  <img src="https://img.shields.io/badge/catalog_footprint-0_MB-3d6bff?style=for-the-badge" alt="catalog footprint: 0 MB">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-0f1630?style=for-the-badge" alt="license: MIT"></a>
+</p>
+
 组件目录的设计蓝图：一套适用于任何前端框架或服务端模板引擎的规则，外加一个可运行的参考实现。
 
 这**不是一个库**，没有需要安装的东西。每个应用按照 [SPEC.md](SPEC.md) 自己编写一个小型目录。

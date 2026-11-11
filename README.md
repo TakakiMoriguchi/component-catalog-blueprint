@@ -2,6 +2,16 @@
 
 English | [日本語](README.ja.md) | [Español](README.es.md) | [简体中文](README.zh-CN.md)
 
+<h1 align="center">0 packages. 0 MB.</h1>
+
+<p align="center"><b>Zero dependencies for the catalog. Your app's own build. Nothing else.</b></p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/catalog_dependencies-0-00b894?style=for-the-badge" alt="catalog dependencies: 0">
+  <img src="https://img.shields.io/badge/catalog_footprint-0_MB-3d6bff?style=for-the-badge" alt="catalog footprint: 0 MB">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-0f1630?style=for-the-badge" alt="license: MIT"></a>
+</p>
+
 A blueprint for component catalogs: one set of rules that works for any front-end framework or server-side template engine, plus a working reference implementation.
 
 This is **not a library**. There is nothing to install. Each app writes its own small catalog by following [SPEC.md](SPEC.md).
