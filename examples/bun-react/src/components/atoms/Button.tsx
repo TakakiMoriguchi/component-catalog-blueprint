@@ -4,22 +4,22 @@ export type ButtonVariant = "primary" | "secondary" | "danger";
 export type ButtonSize = "small" | "medium" | "large";
 
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
-  /** 見た目の種類。 */
+  /** Visual style. */
   variant?: ButtonVariant;
-  /** 大きさ。 */
+  /** Size. */
   size?: ButtonSize;
-  /** 処理中かどうか。押下を無効化して二重実行を防ぐ。 */
+  /** Busy state. Disables the button to prevent double submission. */
   loading?: boolean;
-  /** loading 中に差し替える文言。未指定なら children のまま。 */
+  /** Label shown while loading. Falls back to children. */
   loadingLabel?: ReactNode;
-  /** 親要素の幅いっぱいに広げる。 */
+  /** Stretch to the parent's width. */
   fullWidth?: boolean;
-  /** 既定は "button"。form 内で暗黙に submit させない。 */
+  /** Defaults to "button" so it never submits a form implicitly. */
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
   children: ReactNode;
 }
 
-/** 汎用のボタン。文言と挙動はすべて props で渡す。 */
+/** Generic button. All text and behavior come from props. */
 export function Button({
   variant = "primary",
   size = "medium",
