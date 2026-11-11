@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "component-catalog",
+      "name": "component-catalog-blueprint-example-bun-react",
       "dependencies": {
         "react": "^19",
         "react-dom": "^19",

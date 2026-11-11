@@ -15,7 +15,7 @@
     "baseUrl": ".",
     "paths": { "@/*": ["./src/*"] }
   },
-  // happydom.ts は bun test の preload 専用。@testing-library/jest-dom の types エントリが
-  // module ではないため tsc が解決できない。実行時のみ使うので型検査の対象外にする。
+  // happydom.ts is only a bun test preload. The types entry of @testing-library/jest-dom is
+  // not a module, so tsc cannot resolve it. It runs only at test time, so exclude it.
   "exclude": ["dist", "node_modules", "happydom.ts"]
 }

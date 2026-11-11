@@ -1,124 +1,62 @@
-# component-catalog
+# component-catalog-blueprint
 
-Bun + React で、コンポーネントカタログと単体テストを**追加の依存なし**で用意する最小サンプル。
+A blueprint for component catalogs: one set of rules that works for any front-end framework or server-side template engine, plus a working reference implementation.
 
-Storybook / react-cosmos / Ladle を検討したうえで、いずれも採用せずに同等の目的を満たした構成を、動く形で切り出したものです。
+This is **not a library**. There is nothing to install. Each app writes its own small catalog by following [SPEC.md](SPEC.md).
 
-## 何ができるか
+## Use it
 
-- **コンポーネント単体の見た目を専用 URL で確認できる**（`/catalog.html?c=<コンポーネント名>&f=<fixture 名>`）
-- **コンポーネントの単体テストが書ける**（happy-dom + @testing-library/react）
-- カタログ用の `*.fixture.tsx` を**テストからそのまま再利用できる**
+Give this repository's URL to your AI coding agent in the app where you want a catalog:
 
-カタログは開発サーバーでのみ配信され、本番ビルドには含まれません。
+> Read https://github.com/TakakiMoriguchi/component-catalog-blueprint and build a component catalog for this app that follows its SPEC.md.
 
-## 動かす
+The agent reads [SPEC.md](SPEC.md), checks your stack, and uses the [stack guide](SPEC.md#9-stack-guide) to write the catalog. You can also follow the spec by hand.
 
-```shell
-bun install
+## What you get
 
-bun run catalog    # カタログ付きで起動 → http://localhost:4000/catalog.html
-bun run dev        # 本体アプリのみ
-bun run test       # 単体テスト
-bun run typecheck  # tsc --noEmit
-bun run build      # 本番ビルド (./dist)
+- **Every component grouped by atomic design level**: `atoms`, `molecules`, `organisms`, `templates`, `pages`. The same structure in every app, no matter who added the component.
+- **A search input on the catalog index by default.** Type `button load` to find `Button / Loading`.
+- **One URL per example state**: `/catalog.html?c=Button&f=Loading`. Useful for reviews, screenshots, and visual regression tests.
+- **Fixtures shared with tests.** Each example state is written once, next to its component, and used by both the catalog and the tests.
+- **Development only.** The catalog never ships to production.
+- **No new dependencies** for the catalog itself.
+
+## Why not Storybook?
+
+Catalog tools are good when you want a rich UI with controls, docs pages, and add-ons. Many apps only need to open one component in one state. For that, a page of about 100 lines is enough, and it uses the app's own build, aliases, and environment variables instead of a second build pipeline.
+
+Measured in a clean environment (macOS arm64, number of `package.json` files under `node_modules`):
+
+| Setup | Packages | Size |
+| --- | --- | --- |
+| This blueprint | 0 | 0 |
+| react-cosmos + vite + plugin | 174 | 60 MB |
+| Storybook + @storybook/react-vite + vite | 199 | 146 MB |
+| Ladle | 428 | 121 MB |
+
+Test libraries (for example `@testing-library/*`) are needed with any of these, so they are not counted.
+
+If your app already uses a catalog tool, keep it and apply the spec inside it. See [SPEC.md section 10](SPEC.md#10-apps-that-already-have-a-catalog-tool).
+
+## Repository layout
+
+```
+component-catalog-blueprint/
+├── SPEC.md               # The rules. Framework and language independent.
+├── examples/
+│   └── bun-react/        # Reference implementation. Runs on its own.
+└── LICENSE
 ```
 
-`PORT` で待ち受けポートを変えられます。
+To run the example, see [examples/bun-react/README.md](examples/bun-react/README.md).
 
-```shell
-PORT=4321 bun run catalog
-```
+## Contributing
 
-## 構成
+Issues and pull requests are welcome, especially:
 
-```
-component-catalog/
-├── happydom.ts              # bun test 用の DOM セットアップ (--preload で読む)
-├── testing-library.d.ts     # jest-dom のマッチャーを bun:test の expect に型で認識させる
-├── tsconfig.json
-├── package.json
-└── src/
-    ├── index.ts             # Bun.serve() エントリ。catalog.html を env gate で登録
-    ├── index.html           # 本体アプリ (HTML)
-    ├── app.tsx              # 本体アプリ (React)
-    ├── catalog.html         # カタログ (HTML)
-    ├── catalog.tsx          # カタログ (fixture の登録リスト・選択・一覧)
-    ├── providers.tsx        # カタログと本体アプリで共有するラッパー
-    └── components/
-        ├── Button.tsx          # 対象コンポーネント (汎用のボタン)
-        ├── Button.fixture.tsx  # カタログ用の表示パターン
-        └── Button.test.tsx     # 単体テスト
-```
+- Corrections or additions to the [stack guide](SPEC.md#9-stack-guide) for stacks you use.
+- Cases where the atomic level rules give an unclear answer.
 
-fixture とテストは対象コンポーネントと同じディレクトリに置きます（コロケーション）。
+## License
 
-## 設計上の判断
-
-### カタログに専用ツールを使わない
-
-Storybook / react-cosmos / Ladle は、いずれもバンドラーとして vite か webpack を必要とします。ビルドが `bun build` の場合、ビルド経路が2本立てになり、path alias や環境変数の扱いを2箇所で揃え続けることになります。
-
-クリーンな環境での実測は以下でした（macOS arm64、`node_modules` 配下の `package.json` の実数）。
-
-| 方式 | パッケージ数 | サイズ |
-| ------------- | ------------- | ------------- |
-| このリポジトリの構成 | 0 | 0 |
-| react-cosmos + vite + plugin | 174 | 60MB |
-| Storybook + @storybook/react-vite + vite | 199 | 146MB |
-| Ladle | 428 | 121MB |
-
-「全体を俯瞰する UI が欲しい」なら専用ツールに分があります。「見たいコンポーネントを1つ開きたい」だけなら、`catalog.tsx` の40行で足ります。
-
-なお単体テスト用の4パッケージ（`@happy-dom/global-registrator`、`@testing-library/*` 3つ）は、どのツールを選んでも別途必要になる分です。
-
-### fixture は react-cosmos の形式に合わせる
-
-`*.fixture.tsx` は素の React element を default export します。
-
-```tsx
-export default {
-  デフォルト: <Button onClick={noop}>保存する</Button>,
-  処理中: <Button loading loadingLabel="保存中..." onClick={noop}>保存する</Button>,
-};
-```
-
-react-cosmos の慣習に合わせてあるため、将来 react-cosmos を導入する場合、fixture ファイルは無改造で流用できます。捨てるのは `catalog.tsx` 内の登録リストだけです。
-
-Storybook / Ladle の CSF（`export const 送信中 = { args: { ... } }`）は、props を JSX ではなくデータとして書きます。Controls パネルや props テーブル自動生成のために必要な形式ですが、その機能を使わないなら、素の JSX のほうが単純でテストにも流用しやすくなります。
-
-### UI ライブラリに依存しない
-
-サンプルの `Button` は素の DOM と inline style だけで書いてあります。この構成は特定の UI ライブラリに依存しません。
-
-`Button` 自体もドメインを持たない汎用コンポーネントです。文言は children と props で渡し、`button` 要素の属性はそのまま透過させます。
-
-実アプリでは、カタログと本体アプリの両方を同じ Provider（テーマ、ロケールなど）でラップしてください。カタログだけラップし忘れると、見た目が本体とずれます。このサンプルでは `src/providers.tsx` がその位置づけです。
-
-### カタログは env gate で dev 限定にする
-
-```ts
-const useCatalog = process.env.BUN_PUBLIC_USE_CATALOG === "true";
-const catalogRoutes = useCatalog ? { "/catalog.html": catalog } : {};
-```
-
-本番ビルドは `bun build ./src/index.html` でエントリを名指しするため、`catalog.html` から到達するコードはバンドルに含まれません。
-
-### fixture の自動収集はしていない
-
-Bun には `import.meta.glob` がないため、`catalog.tsx` の `FIXTURES` に手動で1行追加します。
-
-登録を忘れてもテストは通ります（テストは fixture を直接 import するため）。カタログに出ないだけです。
-
-## 実装時に引っかかった点
-
-- **`bun test` には global の `afterEach` が無い。** `@testing-library/react` の自動 cleanup が走らないため、各テストファイルで `afterEach(cleanup)` を明示する
-- **disabled なボタンは `pointer-events` が無効。** `userEvent.click` に `{ pointerEventsCheck: 0 }` を渡して素通りさせる
-- **`@testing-library/jest-dom` は `GlobalRegistrator.register()` の後に読み込む。** `@testing-library/dom` がモジュール評価時に `document` を参照するため、静的 import だと `register()` より先に評価されて `a global document has to be available` で落ちる
-- **`happydom.ts` は `bunfig.toml` の `[test] preload` に置かない。** そこに書くと Playwright を使う E2E（`bun test tests/e2e`）にも happy-dom が適用され、実ブラウザとグローバルが衝突する
-- **`happydom.ts` は typecheck の対象外にしている。** `@testing-library/jest-dom` の types エントリが module ではなく `tsc` が解決できないため。実行時にしか使わないファイルなので `tsconfig.json` の `exclude` に入れている
-- **`Bun.serve` の `routes` に条件付きスプレッドを渡すと型が合わない。** 「キーが optional になる union 型」を現行の Bun 型定義が許容しないため、`@ts-expect-error` で抑制している。ランタイムでは正しく動く
-
-## ライセンス
-
-MIT
+[MIT](LICENSE)
