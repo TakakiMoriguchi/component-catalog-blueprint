@@ -1,5 +1,7 @@
 # component-catalog-blueprint
 
+English | [日本語](README.ja.md) | [Español](README.es.md) | [简体中文](README.zh-CN.md)
+
 A blueprint for component catalogs: one set of rules that works for any front-end framework or server-side template engine, plus a working reference implementation.
 
 This is **not a library**. There is nothing to install. Each app writes its own small catalog by following [SPEC.md](SPEC.md).
