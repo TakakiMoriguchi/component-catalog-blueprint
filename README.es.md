@@ -8,6 +8,20 @@ Esto **no es una biblioteca**. No hay nada que instalar. Cada aplicación escrib
 
 > La versión de referencia de la especificación es [SPEC.md](SPEC.md), en inglés. Este README es una traducción. Si difiere de la versión en inglés, sigue la versión en inglés.
 
+## Vista previa
+
+**Índice: fixtures agrupados por nivel de atomic design, con un campo de búsqueda arriba**
+
+<img src="docs/images/catalog-index.png" alt="Índice del catálogo agrupado por nivel de atomic design" width="480">
+
+**Búsqueda: `button load` encuentra `Button / Loading`**
+
+<img src="docs/images/catalog-search.png" alt="Búsqueda del catálogo filtrada a Button / Loading" width="480">
+
+**Un fixture por URL: `?c=LoginPage&f=Server error`**
+
+<img src="docs/images/catalog-fixture.png" alt="Fixture de LoginPage en el estado Server error" width="480">
+
 ## Uso
 
 En la aplicación donde quieres un catálogo, dale la URL de este repositorio a tu agente de programación con IA:

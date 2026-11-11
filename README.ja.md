@@ -8,6 +8,20 @@
 
 > 仕様の正は英語版の [SPEC.md](SPEC.md) です。この README は翻訳で、英語版と内容が異なる場合は英語版に従ってください。
 
+## 画面
+
+**一覧: fixture を atomic design の階層ごとに表示し、上に検索 input を置く**
+
+<img src="docs/images/catalog-index.png" alt="atomic design の階層ごとに並んだカタログの一覧" width="480">
+
+**検索: `button load` で `Button / Loading` が見つかる**
+
+<img src="docs/images/catalog-search.png" alt="Button / Loading に絞り込んだ検索結果" width="480">
+
+**1つの URL で1つの fixture: `?c=LoginPage&f=Server error`**
+
+<img src="docs/images/catalog-fixture.png" alt="Server error の状態の LoginPage の fixture" width="480">
+
 ## 使い方
 
 カタログを作りたいアプリで、AI コーディングエージェントにこのリポジトリの URL を渡します。

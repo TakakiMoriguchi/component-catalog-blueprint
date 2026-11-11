@@ -6,6 +6,20 @@ A blueprint for component catalogs: one set of rules that works for any front-en
 
 This is **not a library**. There is nothing to install. Each app writes its own small catalog by following [SPEC.md](SPEC.md).
 
+## Preview
+
+**Index: fixtures grouped by atomic level, with a search input on top**
+
+<img src="docs/images/catalog-index.png" alt="Catalog index grouped by atomic level" width="480">
+
+**Search: `button load` finds `Button / Loading`**
+
+<img src="docs/images/catalog-search.png" alt="Catalog search filtered to Button / Loading" width="480">
+
+**One fixture per URL: `?c=LoginPage&f=Server error`**
+
+<img src="docs/images/catalog-fixture.png" alt="LoginPage fixture in the Server error state" width="480">
+
 ## Use it
 
 Give this repository's URL to your AI coding agent in the app where you want a catalog:
