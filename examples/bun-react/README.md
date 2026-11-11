@@ -2,6 +2,8 @@
 
 Reference implementation of [SPEC.md](../../SPEC.md) with Bun and React. It runs on its own and has no catalog dependencies.
 
+> **Frozen.** This example is a reference, not a maintained project. Dependencies are pinned to exact versions and are not updated to follow new releases. It was last verified with Bun 1.4.4. When the example and [SPEC.md](../../SPEC.md) disagree, SPEC.md wins.
+
 ## Run
 
 ```shell
