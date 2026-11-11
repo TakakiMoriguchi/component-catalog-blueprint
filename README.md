@@ -1,8 +1,20 @@
-# component-catalog
+# component-catalog-blueprint
 
 Bun + React で、コンポーネントカタログと単体テストを**追加の依存なし**で用意する最小サンプル。
 
 Storybook / react-cosmos / Ladle を検討したうえで、いずれも採用せずに同等の目的を満たした構成を、動く形で切り出したものです。
+
+## このリポジトリの位置づけ
+
+- **ライブラリではありません。** npm には公開しておらず、各アプリの依存に追加するものではありません。
+- 中身は、カタログの方針（[設計上の判断](#設計上の判断)）と、その方針を示す動く見本です。
+- 各アプリには、この構成を**写して、アプリに合わせて調整する**形で導入します。
+
+想定している使い方は、導入したいアプリで AI エージェントに次のように依頼することです。
+
+> https://github.com/TakakiMoriguchi/component-catalog-blueprint を参考に、このアプリにコンポーネントカタログを作成してください。
+
+依頼を受けたエージェントや、人が手で導入する場合は、[他のアプリに導入する](#他のアプリに導入する) の手順に従ってください。
 
 ## 何ができるか
 
@@ -33,7 +45,7 @@ PORT=4321 bun run catalog
 ## 構成
 
 ```
-component-catalog/
+component-catalog-blueprint/
 ├── happydom.ts              # bun test 用の DOM セットアップ (--preload で読む)
 ├── testing-library.d.ts     # jest-dom のマッチャーを bun:test の expect に型で認識させる
 ├── tsconfig.json
@@ -52,6 +64,57 @@ component-catalog/
 ```
 
 fixture とテストは対象コンポーネントと同じディレクトリに置きます（コロケーション）。
+
+## 他のアプリに導入する
+
+このリポジトリを参考に、別のアプリへカタログを作るときの手順です。AI エージェントがこの README を読んで作業することを想定して書いています。
+
+### 1. 対象アプリを調べる
+
+写す前に、対象アプリの次の点を確認します。
+
+- ランタイムとバンドラー（Bun / Vite / Next.js など）
+- テストランナー（`bun test` / Vitest / Jest など）
+- 既存の Provider（テーマ、ロケール、ルーターなど）と、それを適用している場所
+- path alias（`@/` など）の設定
+- 既存のカタログ（Storybook など）の有無
+
+既に Storybook などを使っている場合は、置き換えずに利用者へ確認してください。
+
+### 2. 守ること
+
+アプリの構成が違っても、次の点は変えません。
+
+- **カタログのために依存を追加しない。** カタログ本体は `catalog.html` と `catalog.tsx` だけで作る
+- **fixture は素の React element を default export する**（`*.fixture.tsx`、形式は [fixture は react-cosmos の形式に合わせる](#fixture-は-react-cosmos-の形式に合わせる)）
+- **fixture はテストから import して再利用する**
+- **カタログと本体アプリを同じ Provider でラップする**
+- **カタログは開発時だけ配信し、本番ビルドに含めない**
+- **確認用の URL は `/catalog.html?c=<コンポーネント名>&f=<fixture 名>` の形にする**
+
+### 3. 写すもの・調整するもの
+
+| このリポジトリのファイル | 対象アプリでの扱い |
+| ------------- | ------------- |
+| `src/catalog.html`, `src/catalog.tsx` | 写す。`FIXTURES` を対象アプリのコンポーネントで登録し直す。import のパスは対象アプリの alias に合わせる |
+| `src/providers.tsx` | 写さない。対象アプリの既存 Provider をカタログからも使う。Provider をまとめたコンポーネントが無ければ作り、本体とカタログの両方で使う |
+| `src/index.ts` の env gate | 考え方だけ写す。対象アプリのサーバー・ルート設定の中で、環境変数が立っているときだけ `catalog.html` を配信する |
+| `package.json` の `catalog` script | 写す。環境変数名は対象アプリの慣習に合わせてよい |
+| `happydom.ts`, `testing-library.d.ts`, `test` script | テストランナーが `bun test` の場合だけ写す。他のランナーではそのランナーの DOM 環境設定に従う |
+| `src/components/Button.*` | 写さない。見本の題材。対象アプリの既存コンポーネントで、fixture とテストを1つ作る |
+| `src/app.tsx`, `src/index.html` | 写さない。見本の本体アプリ |
+
+### 4. バンドラーが Bun でない場合
+
+- **Vite**: 開発サーバーはルートの HTML をそのまま配信します。本番ビルドは `build.rollupOptions.input` に挙げたエントリ（既定は `index.html`）だけを含むため、`catalog.html` をそこに加えなければ本番に入りません。fixture は `import.meta.glob("./**/*.fixture.tsx", { eager: true })` で自動収集できるので、手動の登録リストは不要です
+- **その他**: 「開発時だけ到達できるエントリを1つ足す」ことを、そのフレームワークの方法で実現してください。本番ビルドの出力にカタログのコードが入っていないことを必ず確認します
+
+### 5. 完了の確認
+
+- カタログ用の script で起動し、`/catalog.html` に一覧が出て、各リンクで fixture が表示される
+- 本番ビルドを実行し、出力にカタログのコード（fixture 名など）が含まれない
+- 追加した fixture とテストを含め、テストが通る
+- 型チェックが通る
 
 ## 設計上の判断
 
