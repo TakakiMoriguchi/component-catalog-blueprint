@@ -12,6 +12,7 @@ A working reference implementation for Bun + React is in [`examples/bun-react`](
 - **Fixture**: one named example state of one component, with all inputs fixed. For example, `Button / Loading`.
 - **Catalog**: a development-only page that lists all fixtures and renders any one of them by URL.
 - **Level**: the atomic design level of a component. One of `atoms`, `molecules`, `organisms`, `templates`, `pages`.
+- **Group**: an optional set of components for one part of the product, such as `arena-ui` or `studio-ui`. Each group has its own level directories.
 
 ## 2. Principles
 
@@ -40,13 +41,16 @@ Rules:
 - When unsure, classify by what it uses first, then by role. Pick the lower level if both still fit.
 - Level names MUST be exactly the lowercase plural English words above, in every language and framework. A directory named `templates/` inside a server app's own `templates/` directory is expected.
 - Components SHOULD live in one directory per level: `components/atoms/`, `components/molecules/`, and so on. If the app cannot move existing files, record the level in the fixture registry instead (section 6).
+- An app with groups SHOULD put the level directories inside each group directory: `components/<group>/<level>/`, for example `components/arena-ui/molecules/` and `components/studio-ui/molecules/`. The level is always the directory that directly contains the component. The level rules above apply inside each group.
 - The **component name** shown in the catalog is the file name without extension, in PascalCase: `Button.tsx` → `Button`, `text_input.html.erb` → `TextInput`, `text-input.blade.php` → `TextInput`.
-- Component names MUST be unique across all levels, because the catalog URL uses the name alone.
+- Component names MUST be unique across all groups and levels, because the catalog URL uses the name alone. The group is not part of the URL.
+- A component name MAY be one word, such as `Button` or `Header`. A name of two or more words often makes the meaning clearer, for example `AdminHeader` and `GuestHeader` instead of one generic `Header`.
+- When two groups have the same kind of component, add the word that tells them apart, often the group's name: `ArenaModal` and `StudioModal`, not `Modal` in both groups.
 
 ## 4. Fixtures
 
 - Each component that appears in the catalog MUST have a fixture file. Put it next to the component, named `<Component>.fixture.<ext>` or the closest convention of the stack.
-  - Exception: if a file next to the component would be compiled or shipped into production and the stack cannot exclude it, put fixtures in a development-only directory that mirrors the level directories (for example `dev/catalog/fixtures/atoms/`). Section 9 says where this applies.
+  - Exception: if a file next to the component would be compiled or shipped into production and the stack cannot exclude it, put fixtures in a development-only directory that mirrors the level directories (for example `dev/catalog/fixtures/atoms/`, or `dev/catalog/fixtures/arena-ui/atoms/` with groups). Section 9 says where this applies.
 - A fixture file defines an **ordered** list of **fixture name → example**. Use a structure that keeps order: an object literal in JS, a list of pairs where the language's map is unordered (Go, Elixir). The example uses the native form of the stack (section 9).
 - The first fixture is the most common state. Following fixtures cover variants and edge states: disabled, loading, error, empty, long text.
 - Fixture names describe the state, not the data: `Loading`, `With error`, `Empty`. Use short English words in Title case.
@@ -93,8 +97,8 @@ For server-rendered apps, the search input MAY be a plain `<form method="get">` 
 
 ## 6. Registration
 
-- If the build tool can collect files by pattern, collect fixture files automatically. Examples: `import.meta.glob` in Vite and Turbopack, a directory glob in a server app. Derive the level from the directory.
-- If not, keep one registry file that maps **level → component → fixtures**. Adding a fixture file then means adding one line there. A test (section 8) catches a mismatch between the registry and the files.
+- If the build tool can collect files by pattern, collect fixture files automatically. Examples: `import.meta.glob` in Vite and Turbopack, a directory glob in a server app. Derive the level from the directory that directly contains the component, and the group from the directory above the level, if any.
+- If not, keep one registry file that maps **level → component → fixtures**. With groups, the registry also records the group of each component. Adding a fixture file then means adding one line there. A test (section 8) catches a mismatch between the registry and the files.
 
 ## 7. Development-only gating
 
@@ -119,7 +123,7 @@ For static single-page apps, the HTTP status depends on the host. Verify that th
 ## 8. Tests
 
 - A smoke test MUST render every registered fixture, inside the app's providers, and fail if any rendering fails. Where the template engine renders a missing variable as empty text instead of failing (Django, Jinja, Go with `map` data), make missing values fail in tests, or assert on the output.
-- A test SHOULD check that component names are unique across levels. Check the list of fixture files, not a registry merged by name, because merging silently drops duplicates.
+- A test SHOULD check that component names are unique across groups and levels. Check the list of fixture files, not a registry merged by name, because merging silently drops duplicates.
 - A test SHOULD check that the registry and the fixture files match, when the registry is manual.
 - Behavior tests SHOULD import fixtures instead of rebuilding the same props.
 - The index behavior in section 5.3 SHOULD be tested: grouping order, filtering, and the single fixture view.
