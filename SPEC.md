@@ -64,8 +64,9 @@ Rules:
 | `<catalog>` | The index |
 | `<catalog>?q=<query>` | The index, filtered by the query |
 | `<catalog>?c=<Component>&f=<Fixture>` | One fixture |
+| `<catalog>?c=<Component>` | The component's first fixture |
 
-`<catalog>` is `/catalog.html` for static front-ends, and `/catalog` (or the stack's dev-tools prefix, such as `/dev/catalog` in Phoenix) for apps with a router or server. If `c` and `f` do not match a fixture, show the index.
+`<catalog>` is `/catalog.html` for static front-ends, and `/catalog` (or the stack's dev-tools prefix, such as `/dev/catalog` in Phoenix) for apps with a router or server. `f` is optional. Without it, show the component's first fixture, which is its most common state (section 4). If `c` does not match a component, or `f` does not match one of its fixtures, show the index.
 
 ### 5.2 Single fixture view
 
@@ -227,7 +228,7 @@ A catalog meets this specification when:
 - [ ] Every catalog component sits in one of the five level directories, or has its level recorded in the registry.
 - [ ] Every catalog component has a fixture file, next to it or in the mirrored dev-only directory.
 - [ ] The index has a focused search input and groups fixtures by level in the fixed order.
-- [ ] `?c=<Component>&f=<Fixture>` renders only that fixture, inside the app's providers and layout.
+- [ ] `?c=<Component>&f=<Fixture>` renders only that fixture, inside the app's providers and layout. `?c=<Component>` renders the first fixture.
 - [ ] A smoke test renders every fixture, and the catalog is reachable in the test environment.
 - [ ] Production does not serve the catalog: a build-step stack has no fixture name in its output; a no-build stack returns 404 in production mode.
 - [ ] No dependency was added for the catalog itself.

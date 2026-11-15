@@ -60,7 +60,7 @@
 
 - **所有组件按 atomic design 层级分组**：`atoms`、`molecules`、`organisms`、`templates`、`pages`。无论是谁添加的组件，每个应用都是相同的结构。
 - **目录索引默认带有搜索框。** 输入 `button load` 即可找到 `Button / Loading`。
-- **每个示例状态对应一个 URL**：`/catalog.html?c=Button&f=Loading`。可用于评审、截图和视觉回归测试。
+- **每个示例状态对应一个 URL**：`/catalog.html?c=Button&f=Loading`。可用于评审、截图和视觉回归测试。省略 `f`（`?c=Button`）时，打开该组件的第一个 fixture。
 - **fixture 与测试共享。** 每个示例状态只在组件旁边写一次，目录和测试都会使用它。
 - **仅限开发环境。** 目录永远不会进入生产环境。
 - **目录本身不添加任何新依赖。**

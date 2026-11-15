@@ -66,4 +66,15 @@ describe("catalog index", () => {
     expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument();
     expect(screen.queryByRole("searchbox")).toBeNull();
   });
+
+  test("renders the first fixture when f is omitted", () => {
+    render(<Catalog registry={registry} search="?c=Button" />);
+    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+    expect(screen.queryByRole("searchbox")).toBeNull();
+  });
+
+  test("shows the index when f names no fixture", () => {
+    render(<Catalog registry={registry} search="?c=Button&f=Missing" />);
+    expect(screen.getByRole("searchbox")).toBeInTheDocument();
+  });
 });

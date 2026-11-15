@@ -60,7 +60,7 @@ El agente lee [SPEC.md](SPEC.md), revisa tu stack y usa la [guía por stack](SPE
 
 - **Todos los componentes agrupados por nivel de atomic design**: `atoms`, `molecules`, `organisms`, `templates`, `pages`. La misma estructura en cada aplicación, sin importar quién añadió el componente.
 - **Un campo de búsqueda en el índice del catálogo por defecto.** Escribe `button load` para encontrar `Button / Loading`.
-- **Una URL por cada estado de ejemplo**: `/catalog.html?c=Button&f=Loading`. Útil para revisiones, capturas de pantalla y pruebas de regresión visual.
+- **Una URL por cada estado de ejemplo**: `/catalog.html?c=Button&f=Loading`. Útil para revisiones, capturas de pantalla y pruebas de regresión visual. Sin `f` (`?c=Button`), se abre el primer fixture del componente.
 - **Fixtures compartidos con las pruebas.** Cada estado de ejemplo se escribe una sola vez, junto a su componente, y lo usan tanto el catálogo como las pruebas.
 - **Solo en desarrollo.** El catálogo nunca llega a producción.
 - **Sin nuevas dependencias** para el catálogo en sí.
