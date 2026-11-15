@@ -31,10 +31,12 @@ export function matches(entry: Entry, query: string): boolean {
     .every((term) => haystack.includes(term));
 }
 
-function findFixture(registry: Registry, component: string, fixture: string): ReactElement | undefined {
+/** Without a fixture name, return the component's first fixture (the most common state). */
+function findFixture(registry: Registry, component: string, fixture: string | null): ReactElement | undefined {
   for (const level of LEVELS) {
-    const element = registry[level][component]?.[fixture];
-    if (element) return element;
+    const fixtures = registry[level][component];
+    if (!fixtures) continue;
+    return fixtures[fixture ?? Object.keys(fixtures)[0]];
   }
   return undefined;
 }
@@ -110,7 +112,7 @@ export function Catalog({ registry, search }: { registry: Registry; search: stri
   const params = new URLSearchParams(search);
   const component = params.get("c");
   const fixture = params.get("f");
-  const selected = component && fixture ? findFixture(registry, component, fixture) : undefined;
+  const selected = component ? findFixture(registry, component, fixture) : undefined;
 
   return selected ?? <CatalogIndex registry={registry} initialQuery={params.get("q") ?? ""} />;
 }

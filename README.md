@@ -58,7 +58,7 @@ The agent reads [SPEC.md](SPEC.md), checks your stack, and uses the [stack guide
 
 - **Every component grouped by atomic design level**: `atoms`, `molecules`, `organisms`, `templates`, `pages`. The same structure in every app, no matter who added the component.
 - **A search input on the catalog index by default.** Type `button load` to find `Button / Loading`.
-- **One URL per example state**: `/catalog.html?c=Button&f=Loading`. Useful for reviews, screenshots, and visual regression tests.
+- **One URL per example state**: `/catalog.html?c=Button&f=Loading`. Useful for reviews, screenshots, and visual regression tests. Leave out `f` (`?c=Button`) to open the component's first fixture.
 - **Fixtures shared with tests.** Each example state is written once, next to its component, and used by both the catalog and the tests.
 - **Development only.** The catalog never ships to production.
 - **No new dependencies** for the catalog itself.
